@@ -1,0 +1,14 @@
+name: kubernetes manifests validation
+
+on: [pull_request]
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: validate manifests in dir1 and dir2
+        uses: makocchi-git/actions-k8s-manifests-validate-kubeval@v1.0.1
+        with:
+          files: k8s
+          token: ${{ secrets.GITHUB_TOKEN }}
