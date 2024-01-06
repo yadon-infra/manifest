@@ -19,7 +19,7 @@ spec:
             port: 
               name: https
               number: 80
-    host: argocd.example.com
+    host: argocd.yadon3141.com
   tls:
   - hosts:
     - argocd.example.com
