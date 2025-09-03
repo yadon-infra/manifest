@@ -1,26 +1,19 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: argocd-server-http-ingress
+  name: argocd-server-ingress
   namespace: argocd
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - http:
+  - host: argocd.yadon3141.com
+    http:
       paths:
-      - pathType: Prefix
-        path: /
+      - path: /
+        pathType: Prefix
         backend:
           service:
             name: argocd-server
-            port: 
-              name: https
+            port:
               number: 80
-    host: argocd.yadon3141.com
-  tls:
-  - hosts:
-    - argocd.example.com
-    secretName: argocd-secret
