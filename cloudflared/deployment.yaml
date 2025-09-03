@@ -42,15 +42,6 @@ spec:
           mountPath: /etc/cloudflared/creds
           readOnly: true
       volumes:
-      - name: creds
-        secret:
-          # By default, the credentials file will be created under ~/.cloudflared/<tunnel ID>.json
-          # when you run `cloudflared tunnel create`. You can move it into a secret by using:
-          # ```sh
-          # kubectl create secret generic tunnel-credentials \
-          # --from-file=credentials.json=/Users/yourusername/.cloudflared/<tunnel ID>.json
-          # ```
-          secretName: tunnel-credentials
       # Create a config.yaml file from the ConfigMap below.
       - name: config
         configMap:
