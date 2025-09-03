@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloudflared-argocd
+  name: cloudflared
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cloudflared-argocd
+      app: cloudflared
   template:
     metadata:
       labels:
-        app: cloudflared-argocd
+        app: cloudflared
     spec:
       containers:
       - name: cloudflared
@@ -26,7 +26,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: cloudflared-argocd
+          name: cloudflared
           items:
           - key: config.yaml
             path: config.yaml
