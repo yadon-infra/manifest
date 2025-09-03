@@ -11,7 +11,6 @@ spec:
   source:
     repoURL: https://github.com/yadon-infra/manifest
     targetRevision: main
-    path: application
   syncPolicy:
     automated:
       prune: true
