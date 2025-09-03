@@ -15,14 +15,13 @@ spec:
       containers:
       - name: cloudflared
         image: cloudflare/cloudflared:2025.8.1 
-        args: 
-        - tunnel
-        # Points cloudflared to the config file, which configures what
-        # cloudflared will actually do. This file is created by a ConfigMap
-        # below.
-        - --config
-        - /etc/cloudflared/config/config.yaml
-        - run
+        args: ["tunnel","--no-autoupdate","run","--token","$(TUNNEL_TOKEN)"]
+        env:
+          - name: TUNNEL_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: cloudflared-token
+                key: TUNNEL_TOKEN
         livenessProbe:
           httpGet:
             # Cloudflared has a /ready endpoint which returns 200 if and only if
