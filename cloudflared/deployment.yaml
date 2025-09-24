@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: cloudflared
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: cloudflared
