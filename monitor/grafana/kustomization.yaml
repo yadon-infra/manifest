@@ -5,3 +5,4 @@ resources:
   - components/deployment.yaml  
   - components/service.yaml  
   - components/pvc.yaml 
+  - components/ingress.yaml
