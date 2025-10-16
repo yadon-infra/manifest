@@ -16,6 +16,7 @@ spec:
         revision: main
         directories:
           - path: '*'
+          - path: 'monitor/*'
         values:
           path: '{{path.basename}}'
 
