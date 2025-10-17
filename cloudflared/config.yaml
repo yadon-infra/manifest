@@ -5,7 +5,7 @@ metadata:
 data:
   config.yaml: |
     # Name of the tunnel you want to run
-    tunnel: 34e76efe-3595-485d-b07e-0098550f924a
+    tunnel: 1c046408-d2a8-4493-8b4f-da90f03969a5
     credentials-file: /etc/cloudflared/creds/credentials.json
     # Serves the metrics server under /metrics and the readiness server under /ready
     metrics: 0.0.0.0:2000
