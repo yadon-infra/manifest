@@ -1,0 +1,8 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: longhorn
+  labels:
+    service: longhorn
+    type: infrastructure
+    gateway: cilium
