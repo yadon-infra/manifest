@@ -1,11 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: longhorn-ui-ingress
+  name: longhorn-ui
   namespace: longhorn
-  annotations:
-    kubernetes.io/ingress.class: traefik
 spec:
+  ingressClassName: traefik
   rules:
   - host: longhorn.yadon3141.com
     http:
@@ -14,6 +13,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: longhorn-ui
+            name: longhorn-frontend
             port:
-              number: 443
+              number: 80
