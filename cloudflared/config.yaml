@@ -27,4 +27,6 @@ data:
       service: http://traefik.kube-system.svc.cluster.local:80
     - hostname: grafana.yadon3141.com
       service: http://traefik.kube-system.svc.cluster.local:80
+    - hostname: longhorn.yadon3141.com
+      service: http://traefik.kube-system.svc.cluster.local:80
     - service: http_status:404
