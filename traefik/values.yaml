@@ -30,6 +30,7 @@ service:
     expose: "lb"                         
   loadBalancerClass: "io.cilium/l2-announcer"
   annotations:
+    lbipam.cilium.io/ips: "192.168.0.241"
   externalTrafficPolicy: Cluster
 
 ingressRoute:
