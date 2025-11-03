@@ -25,7 +25,7 @@ data:
     # The first rule proxies traffic to the httpbin sample Service defined in app.yaml
 
     - hostname: argocd.yadon3141.com
-      service: http://traefik.kube-system.svc.cluster.local:80
+      service: http://argocd-server.argocd.svc.cluster.local:80
     - hostname: grafana.yadon3141.com
       service: http://traefik.kube-system.svc.cluster.local:80
     - hostname: longhorn.yadon3141.com
