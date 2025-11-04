@@ -1,0 +1,3 @@
+resources:
+  - l2-policy.yaml
+  - lb-pool.yaml

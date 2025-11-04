@@ -1,0 +1,43 @@
+deployment:
+  replicas: 2
+
+providers:
+  kubernetesCRD:
+    enabled: true
+  kubernetesIngress:
+    enabled: true
+    publishedService:
+      enabled: true
+
+ports:
+  web:
+    port: 8000
+    expose:
+      default: true
+    exposedPort: 80
+  websecure:
+    port: 8443
+    expose:
+      default: true
+    exposedPort: 443
+    tls:
+      enabled: true
+
+service:
+  enabled: true
+  type: LoadBalancer
+  labels:
+    expose: "lb"                         
+  loadBalancerClass: "io.cilium/l2-announcer"
+  annotations:
+  externalTrafficPolicy: Cluster
+
+ingressRoute:
+  dashboard:
+    enabled: false
+
+logs:
+  general:
+    level: INFO
+  access:
+    enabled: true

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-repo-server
+spec:
+  replicas: 2
+  template:
+    spec:
+      volumes:
+        - name: kustomize-plugins
+          emptyDir: {}
+        - name: sops-age
+          secret:
+            secretName: sops-age-key
+      initContainers:
+        - name: install-ksops-sops
+          image: alpine:3.20
+          command: ["/bin/sh","-c"]
+          args: |
+            set -eu
+            apk add --no-cache curl
+            KSOPS_VER="4.4.0"
+            mkdir -p /plugins/viaduct.ai/v1/ksops
+            curl -L -o /plugins/viaduct.ai/v1/ksops/ksops \
+              "https://github.com/viaduct-ai/kustomize-sops/releases/download/v${KSOPS_VER}/ksops_${KSOPS_VER}_linux_amd64"
+            chmod +x /plugins/viaduct.ai/v1/ksops/ksops
+            SOPS_VER="3.11.0"
+            curl -L -o /usr/local/bin/sops \
+              "https://github.com/getsops/sops/releases/download/v${SOPS_VER}/sops-v${SOPS_VER}.linux.amd64"
+            chmod +x /usr/local/bin/sops
+          volumeMounts:
+            - name: kustomize-plugins
+              mountPath: /plugins
+      containers:
+        - name: argocd-repo-server
+          env:
+            - name: XDG_CONFIG_HOME
+              value: /home/argocd/.config
+            - name: KUSTOMIZE_PLUGIN_HOME
+              value: /home/argocd/.config/kustomize/plugin
+            - name: SOPS_AGE_KEY_FILE
+              value: /home/argocd/.config/sops/age/keys.txt
+          volumeMounts:
+            - name: kustomize-plugins
+              mountPath: /home/argocd/.config/kustomize/plugin
+            - name: sops-age
+              mountPath: /home/argocd/.config/sops/age
+              readOnly: true
