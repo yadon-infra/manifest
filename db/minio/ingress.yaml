@@ -3,9 +3,8 @@ kind: Ingress
 metadata:
   name: minio-ingress
   namespace: minio
-  annotations:
-    kubernetes.io/ingress.class: traefik
 spec:
+  ingressClassName: traefik 
   rules:
     - host: s3.yadon3141.com
       http:
@@ -14,9 +13,9 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: minio
+                name: minio              
                 port:
-                  number: 9000
+                  number: 80             
     - host: minio.yadon3141.com
       http:
         paths:
@@ -24,6 +23,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: minio
+                name: myminio-console    
                 port:
-                  number: 9001
+                  number: 9090

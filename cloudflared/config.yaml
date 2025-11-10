@@ -32,4 +32,6 @@ data:
       service: http://traefik.traefik.svc.cluster.local:80
     - hostname: minio-operator.yadon3141.com
       service: http://traefik.traefik.svc.cluster.local:80
+    - hostname: minio.yadon3141.com
+      service: http://traefik.traefik.svc.cluster.local:80
     - service: http_status:404
