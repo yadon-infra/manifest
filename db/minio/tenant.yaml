@@ -1,0 +1,28 @@
+apiVersion: minio.min.io/v2
+kind: Tenant
+metadata:
+  name: myminio
+  namespace: minio
+
+spec:
+  configuration:
+    name: storage-configuration
+  image: quay.io/minio/minio:RELEASE.2025-04-08T15-41-24Z
+  exposeServices:
+    minio: false
+    console: false
+  mountPath: /export
+  requestAutoCert: false  
+  pools:
+    - name: pool-0
+      servers: 4
+      volumesPerServer: 1
+      volumeClaimTemplate:
+        metadata:
+          name: data
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+          storageClassName: longhorn
