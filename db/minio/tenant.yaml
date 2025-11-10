@@ -19,7 +19,8 @@ spec:
           key: secretkey
 
   pools:
-    - servers: 4
+    - name: pool-0
+      servers: 4
       volumesPerServer: 1
       volumeClaimTemplate:
         metadata:
