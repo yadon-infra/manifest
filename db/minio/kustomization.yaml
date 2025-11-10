@@ -6,5 +6,4 @@ namespace: minio
 resources:
 - namespace.yaml
 - ingress.yaml
-- secret.yaml
 - tenant.yaml
