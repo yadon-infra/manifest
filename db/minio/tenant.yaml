@@ -3,7 +3,7 @@ kind: Tenant
 metadata:
   name: myminio
   namespace: minio
-  
+
 spec:
   configuration:
     name: storage-configuration
@@ -12,9 +12,7 @@ spec:
     minio: false
     console: false
   mountPath: /export
-  requestAutoCert: true  
-  users:
-    - name: storage-user
+  requestAutoCert: false  
   pools:
     - name: pool-0
       servers: 4
