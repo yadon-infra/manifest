@@ -5,8 +5,19 @@ metadata:
   namespace: minio
 spec:
   image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
-  credsSecret:
-    name: minio-creds-secret
+
+  env:
+    - name: MINIO_ROOT_USER
+      valueFrom:
+        secretKeyRef:
+          name: minio-creds-secret
+          key: accesskey
+    - name: MINIO_ROOT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: minio-creds-secret
+          key: secretkey
+
   pools:
     - servers: 4
       volumesPerServer: 1
@@ -14,14 +25,14 @@ spec:
         metadata:
           name: data
         spec:
-          accessModes:
-            - ReadWriteOnce
+          accessModes: [ "ReadWriteOnce" ]
           resources:
             requests:
               storage: 50Gi
           storageClassName: longhorn
+
   mountPath: /export
   requestAutoCert: false
   exposeServices:
     console: false
-    minio: false
+    minio:  false
