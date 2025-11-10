@@ -17,6 +17,7 @@ spec:
         directories:
           - path: '*'
           - path: 'monitor/*'
+          - path: 'db/*'
         values:
           path: '{{path.basename}}'
 
