@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio-ingress
+  namespace: minio
+spec:
+  ingressClassName: traefik 
+  rules:
+    - host: s3.yadon3141.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: minio              
+                port:
+                  number: 80             
+    - host: minio.yadon3141.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: myminio-console    
+                port:
+                  number: 9090
