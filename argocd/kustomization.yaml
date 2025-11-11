@@ -5,8 +5,14 @@ namespace: argocd
 
 resources:
   - ingress.yaml
-  - repo-server-patch.yaml
-  - ../base-argocd
+
+helmCharts:
+  - name: argo-cd
+    repo: https://argoproj.github.io/argo-helm
+    version: 9.1.0
+    releaseName: argocd
+    namespace: argocd
+    valuesFile: values.yaml
 
 generatorOptions:
   disableNameSuffixHash: true
