@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: argocd-repo-server
+  name: argocd-argocd-repo-server 
+  namespace: argocd  
 spec:
   replicas: 2
   template:
