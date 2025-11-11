@@ -23,5 +23,5 @@ configMapGenerator:
     literals:
       - kustomize.buildOptions=--enable-alpha-plugins --enable-exec
 
-patchesStrategicMerge:
-  - repo-server-patch.yaml
+patches:
+  - path: repo-server-patch.yaml
