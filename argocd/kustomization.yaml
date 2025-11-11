@@ -17,11 +17,5 @@ helmCharts:
 generatorOptions:
   disableNameSuffixHash: true
 
-configMapGenerator:
-  - name: argocd-cm
-    behavior: merge
-    literals:
-      - kustomize.buildOptions=--enable-alpha-plugins --enable-exec
-
 patches:
   - path: repo-server-patch.yaml
