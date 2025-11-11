@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/yadon-infra/manifest
     targetRevision: main
-    path: plane
+    path: application/plane
   destination:
     server: https://kubernetes.default.svc
     namespace: plane
