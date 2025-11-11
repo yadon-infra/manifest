@@ -47,3 +47,6 @@ repoServer:
       volumeMounts:
         - name: kustomize-plugins
           mountPath: /plugins
+        
+server:
+  insecure: true
