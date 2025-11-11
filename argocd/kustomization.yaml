@@ -16,6 +16,3 @@ helmCharts:
 
 generatorOptions:
   disableNameSuffixHash: true
-
-patches:
-  - path: repo-server-patch.yaml
