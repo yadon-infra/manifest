@@ -50,4 +50,5 @@ repoServer:
           mountPath: /plugins
         
 server:
-  insecure: true
+  extraArgs:
+    - --insecure
