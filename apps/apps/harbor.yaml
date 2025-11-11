@@ -1,22 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: longhorn-resources
+  name: harbor
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/yadon-infra/manifest
     targetRevision: main
-    path: longhorn
-    directory:
-      include: '{ingress.yaml,namespace.yaml}'
+    path: harbor
   destination:
     server: https://kubernetes.default.svc
-    namespace: longhorn-system
+    namespace: harbor
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
+      - CreateNamespace=true
       - ServerSideApply=true

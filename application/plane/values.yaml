@@ -1,0 +1,227 @@
+planeVersion: v1.15.0
+
+dockerRegistry:
+  enabled: false
+  registry: 'index.docker.io/v1/'
+  loginid: ''
+  password: ''
+
+license:
+  licenseServer: https://prime.plane.so
+  licenseDomain: 'plane.yadon3141.com'  # 実運用ドメインに合わせて
+
+airgapped:
+  enabled: false
+  s3SecretName: ""
+  s3SecretKey: ""
+
+ingress:
+  enabled: true
+  minioHost: ''         # 既存MinIOのUIを別Ingressで持っているなら空でOK
+  rabbitmqHost: ''      # 必要なら管理UIを公開
+  ingressClass: 'traefik'
+  ingress_annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    # 必要に応じて: traefik.ingress.kubernetes.io/redirect-entry-point: websecure
+    #               traefik.ingress.kubernetes.io/router.tls: "true"
+
+ssl:
+  tls_secret_name: 'plane-tls'  # cert-manager等で作るSecret名。既にあるものを指定
+  createIssuer: false           # Traefik/cert-manager側で証明書を発行する運用を想定
+  issuer: http
+  token: ''
+  server: https://acme-v02.api.letsencrypt.org/directory
+  email: plane@example.com
+  generateCerts: false
+
+services:
+  redis:
+    local_setup: true
+    image: valkey/valkey:7.2.11-alpine
+    servicePort: 6379
+    volumeSize: 500Mi
+    pullPolicy: IfNotPresent
+
+  postgres:
+    local_setup: true
+    image: postgres:15.7-alpine
+    servicePort: 5432
+    volumeSize: 10Gi
+    pullPolicy: IfNotPresent
+
+  rabbitmq:
+    local_setup: true
+    image: rabbitmq:3.13.6-management-alpine
+    servicePort: 5672
+    managementPort: 15672
+    volumeSize: 1Gi
+    pullPolicy: IfNotPresent
+    default_user: plane
+    default_password: plane
+    external_rabbitmq_url: ''
+
+  # ← ここが重要：既存MinIOを使うため Plane 同梱MinIOは無効化
+  minio:
+    local_setup: false
+    image: minio/minio:latest
+    image_mc: minio/mc:latest
+    volumeSize: 0Gi
+    pullPolicy: IfNotPresent
+    root_user: ""
+    root_password: ""
+    env:
+      minio_endpoint_ssl: false
+
+  iframely:
+    enabled: false
+
+  web:
+    replicas: 1
+    image: artifacts.plane.so/makeplane/web-commercial
+    pullPolicy: Always
+
+  monitor:
+    image: artifacts.plane.so/makeplane/monitor-commercial
+    pullPolicy: Always
+    volumeSize: 100Mi
+
+  space:
+    replicas: 1
+    image: artifacts.plane.so/makeplane/space-commercial
+    pullPolicy: Always
+
+  admin:
+    replicas: 1
+    image: artifacts.plane.so/makeplane/admin-commercial
+    pullPolicy: Always
+
+  live:
+    replicas: 1
+    image: artifacts.plane.so/makeplane/live-commercial
+    pullPolicy: Always
+
+  api:
+    replicas: 1
+    image: artifacts.plane.so/makeplane/backend-commercial
+    pullPolicy: Always
+
+  worker:
+    replicas: 1
+
+  beatworker:
+    replicas: 1
+
+  silo:
+    enabled: true
+    replicas: 1
+    image: artifacts.plane.so/makeplane/silo-commercial
+    pullPolicy: Always
+    connectors:
+      slack:
+        enabled: false
+        client_id: ''
+        client_secret: ''
+      github:
+        enabled: false
+        client_id: ''
+        client_secret: ''
+        app_name: ''
+        app_id: ''
+        private_key: ''
+      gitlab:
+        enabled: false
+        client_id: ''
+        client_secret: ''
+
+  email_service:
+    enabled: false
+
+  outbox_poller:
+    enabled: false
+
+  automation_consumer:
+    enabled: false
+
+external_secrets:
+  rabbitmq_existingSecret: ''
+  pgdb_existingSecret: ''
+  # ★ 既存MinIOのアクセスキー/シークレットを格納したSecret名
+  doc_store_existingSecret: 'plane-docstore-cred'
+  app_env_existingSecret: ''
+  live_env_existingSecret: ''
+  silo_env_existingSecret: ''
+
+env:
+  # Longhorn を使うなら指定
+  storageClass: 'longhorn'
+
+  # REDIS（外部を使うならURLを入れる）
+  remote_redis_url: ''
+
+  # POSTGRES（外部DBを使う場合はURLを入れる）
+  pgdb_username: plane
+  pgdb_password: plane
+  pgdb_name: plane
+  pgdb_remote_url: ''
+
+  # S3/MinIO（★既存MinIOを使うため、ここが肝心）
+  docstore_bucket: 'uploads'
+  doc_upload_size_limit: '5242880' # 5MB
+  aws_access_key: ''           # ← Secret優先、空でOK
+  aws_secret_access_key: ''    # ← Secret優先、空でOK
+  aws_region: 'us-east-1'      # MinIOでもダミーでOK
+  # 既存 MinIO のエンドポイント（Ingress経由でTLSなら https を指定）
+  aws_s3_endpoint_url: 'https://s3.yadon3141.com'
+  use_storage_proxy: false
+
+  secret_key: "60gp0byfz2dvffa45cxl20p1scy9xbpf6d8c5y0geejgkyp1b5"
+  api_key_rate_limit: "60/minute"
+
+  sentry_dsn: ''
+  sentry_environment: ''
+  cors_allowed_origins: 'https://plane.yadon3141.com'
+  instance_admin_email: 'admin@plane.yadon3141.com'
+
+  live_sentry_dsn: ""
+  live_sentry_environment: ""
+  live_sentry_traces_sample_rate: ""
+  live_server_secret_key: "htbqvBJAgpm9bzvf3r4urJer0ENReatceh"
+  external_iframely_url: ""
+
+  silo_envs:
+    sentry_dsn: ''
+    sentry_environment: ''
+    sentry_traces_sample_rate: ''
+    batch_size: 100
+    mq_prefetch_count: 1
+    request_interval: 400
+    hmac_secret_key: ''
+    aes_secret_key: 'dsOdt7YrvxsTIFJ37pOaEVvLxN8KGBCr'
+    cors_allowed_origins: 'https://plane.yadon3141.com'
+
+  email_service_envs:
+    smtp_domain: ''
+
+  outbox_poller_envs:
+    memory_limit_mb: 400
+    interval_min: 0.25
+    interval_max: 2
+    batch_size: 250
+    memory_check_interval: 30
+    pool:
+      size: 4
+      min_size: 2
+      max_size: 10
+      timeout: 30.0
+      max_idle: 300.0
+      max_lifetime: 3600
+      reconnect_timeout: 5.0
+      health_check_interval: 60
+
+  automation_consumer_envs:
+    event_stream_queue_name: "plane.event_stream.automations"
+    event_stream_prefetch: 10
+    exchange_name: "plane.event_stream"
+    event_types: "issue"
+
+extraEnv: []
