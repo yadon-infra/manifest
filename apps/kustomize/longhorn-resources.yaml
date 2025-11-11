@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: longhorn-resources
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/yadon-infra/manifest
+    targetRevision: main
+    path: longhorn
+    directory:
+      include: '{ingress.yaml,namespace.yaml}'
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: longhorn-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
