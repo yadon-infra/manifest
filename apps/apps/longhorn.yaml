@@ -20,9 +20,4 @@ spec:
       - CreateNamespace=true
       - ServerSideApply=true
       - RespectIgnoreDifferences=true
-  ignoreDifferences:
-    - group: ""
-      kind: ConfigMap
-      name: longhorn-default-resource
-      jsonPointers:
-        - /data
+      
