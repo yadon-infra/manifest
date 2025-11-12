@@ -3,9 +3,9 @@ kind: Kustomization
 
 namespace: plane
 
-resources:
-  - secret-app.yaml
-  - secret-datastore.yaml
+# resources:
+#   - secret-app.yaml
+#   - secret-datastore.yaml
 
 helmCharts:
   - name: plane-ce
