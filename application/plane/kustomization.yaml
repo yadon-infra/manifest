@@ -3,9 +3,9 @@ kind: Kustomization
 
 namespace: plane
 
-generators:
-  - generators/plane-app-env-generator.yaml
-  - generators/plane-docstore-cred-generator.yaml
+resources:
+  - secret-app.yaml
+  - secret-datastore.yaml
 
 helmCharts:
   - name: plane-ce
