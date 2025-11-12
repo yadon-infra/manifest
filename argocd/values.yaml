@@ -1,7 +1,7 @@
 configs:
   cm:
     url: https://argocd.yadon3141.com 
-    kustomize.buildOptions: "--enable-alpha-plugins --enable-exec"
+    kustomize.buildOptions: "--enable-helm --enable-alpha-plugins --enable-exec"
 
 repoServer:
   enabled: true
