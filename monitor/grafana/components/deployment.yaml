@@ -30,5 +30,5 @@ spec:
             claimName: grafana-storage
       securityContext:
         runAsNonRoot: true
-        runAsUser: 65534
+        runAsUser: 472
         fsGroup: 472
