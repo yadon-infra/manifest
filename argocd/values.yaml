@@ -21,12 +21,17 @@ repoServer:
     - name: sops-age
       secret:
         secretName: sops-age-key
+    - name: custom-tools
+      emptyDir: {}
 
   volumeMounts:
     - name: kustomize-plugins
       mountPath: /home/argocd/.config/kustomize/plugin
     - name: sops-age
       mountPath: /home/argocd/.config/sops/age
+      readOnly: true
+    - name: custom-tools
+      mountPath: /usr/local/sbin
       readOnly: true
 
   extraInitContainers:
@@ -41,13 +46,17 @@ repoServer:
         curl -L -o /plugins/viaduct.ai/v1/ksops/ksops
         "https://github.com/viaduct-ai/kustomize-sops/releases/download/v${KSOPS_VER}/ksops_${KSOPS_VER}_linux_amd64"
         chmod +x /plugins/viaduct.ai/v1/ksops/ksops
+        mkdir -p /custom-tools
+        cp /plugins/viaduct.ai/v1/ksops/ksops /custom-tools/ksops
         SOPS_VER="3.11.0"
-        curl -L -o /usr/local/bin/sops
+        curl -L -o /custom-tools/sops
         "https://github.com/getsops/sops/releases/download/v${SOPS_VER}/sops-v${SOPS_VER}.linux.amd64"
-        chmod +x /usr/local/bin/sops
+        chmod +x /custom-tools/sops
       volumeMounts:
         - name: kustomize-plugins
           mountPath: /plugins
+        - name: custom-tools
+          mountPath: /custom-tools
         
 server:
   extraArgs:
