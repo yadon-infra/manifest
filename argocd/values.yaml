@@ -14,6 +14,8 @@ repoServer:
       value: /home/argocd/.config/kustomize/plugin
     - name: SOPS_AGE_KEY_FILE
       value: /home/argocd/.config/sops/age/keys.txt
+    - name: PATH
+      value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/custom-tools
 
   volumes:
     - name: kustomize-plugins
@@ -31,7 +33,7 @@ repoServer:
       mountPath: /home/argocd/.config/sops/age
       readOnly: true
     - name: custom-tools
-      mountPath: /usr/local/sbin
+      mountPath: /usr/local/custom-tools
       readOnly: true
 
   extraInitContainers:
