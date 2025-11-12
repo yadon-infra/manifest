@@ -17,4 +17,13 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
+      - CreateNamespace=true
       - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+  ignoreDifferences:
+    - group: ""
+      kind: Service
+      name: grafana
+    - group: networking.k8s.io
+      kind: Ingress
+      name: grafana
