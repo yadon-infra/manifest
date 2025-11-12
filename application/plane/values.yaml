@@ -168,7 +168,7 @@ env:
   live_sentry_dsn: ""
   live_sentry_environment: ""
   live_sentry_traces_sample_rate: ""
-  live_server_secret_key: "htbqvBJAgpm9bzvf3r4urJer0ENReatceh"
+  live_server_secret_key: ""
   external_iframely_url: ""
 
   silo_envs:
@@ -179,7 +179,7 @@ env:
     mq_prefetch_count: 1
     request_interval: 400
     hmac_secret_key: ''
-    aes_secret_key: 'dsOdt7YrvxsTIFJ37pOaEVvLxN8KGBCr'
+    aes_secret_key: ''
     cors_allowed_origins: 'https://plane.yadon3141.com'
 
   email_service_envs:
