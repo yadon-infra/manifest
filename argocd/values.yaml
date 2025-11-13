@@ -40,20 +40,19 @@ repoServer:
     - name: install-ksops-sops
       image: alpine:3.20
       command: ["/bin/sh","-c"]
-      args: >
-        set -eu
-        apk add --no-cache curl
-        KSOPS_VER="4.4.0"
-        mkdir -p /plugins/viaduct.ai/v1/ksops
-        curl -L -o /plugins/viaduct.ai/v1/ksops/ksops
-        "https://github.com/viaduct-ai/kustomize-sops/releases/download/v${KSOPS_VER}/ksops_${KSOPS_VER}_linux_amd64"
-        chmod +x /plugins/viaduct.ai/v1/ksops/ksops
-        mkdir -p /custom-tools
-        cp /plugins/viaduct.ai/v1/ksops/ksops /custom-tools/ksops
-        SOPS_VER="3.11.0"
-        curl -L -o /custom-tools/sops
-        "https://github.com/getsops/sops/releases/download/v${SOPS_VER}/sops-v${SOPS_VER}.linux.amd64"
-        chmod +x /custom-tools/sops
+      args:
+        - |
+          set -eu
+          apk add --no-cache curl
+          KSOPS_VER="4.4.0"
+          mkdir -p /plugins/viaduct.ai/v1/ksops
+          curl -L -o /plugins/viaduct.ai/v1/ksops/ksops "https://github.com/viaduct-ai/kustomize-sops/releases/download/v${KSOPS_VER}/ksops_${KSOPS_VER}_linux_amd64"
+          chmod +x /plugins/viaduct.ai/v1/ksops/ksops
+          mkdir -p /custom-tools
+          cp /plugins/viaduct.ai/v1/ksops/ksops /custom-tools/ksops
+          SOPS_VER="3.9.0"
+          curl -L -o /custom-tools/sops "https://github.com/getsops/sops/releases/download/v${SOPS_VER}/sops-v${SOPS_VER}.linux.amd64"
+          chmod +x /custom-tools/sops
       volumeMounts:
         - name: kustomize-plugins
           mountPath: /plugins
