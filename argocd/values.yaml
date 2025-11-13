@@ -36,10 +36,10 @@ repoServer:
       mountPath: /custom-tools
       readOnly: true
 
-  extraInitContainers:
+  initContainers:
     - name: install-ksops-sops
       image: alpine:3.20
-      command: ["/bin/sh","-c"]
+      command: [sh, -c]
       args:
         - |
           set -eu
