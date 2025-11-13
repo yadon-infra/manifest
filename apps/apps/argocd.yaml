@@ -9,8 +9,6 @@ spec:
     repoURL: https://github.com/yadon-infra/manifest
     targetRevision: main
     path: argocd
-    kustomize:
-      buildOptions: "--enable-helm --enable-alpha-plugins"
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
