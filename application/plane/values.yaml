@@ -1,4 +1,4 @@
-planeVersion: stable
+planeVersion: 0.21.0
 
 dockerRegistry:
   enabled: false
@@ -66,48 +66,48 @@ services:
 
   web:
     replicas: 1
-    image: makeplane/plane-frontend:stable
+    image: makeplane/plane-frontend:0.21.0
     pullPolicy: Always
 
   monitor:
-    image: makeplane/plane-frontend:stable
+    image: makeplane/plane-frontend:0.21.0
     pullPolicy: Always
     volumeSize: 100Mi
 
   space:
     replicas: 1
-    image: makeplane/plane-space:stable
+    image: makeplane/plane-space:0.21.0
     pullPolicy: Always
 
   admin:
     replicas: 1
-    image: makeplane/plane-admin:stable
+    image: makeplane/plane-admin:0.21.0
     pullPolicy: Always
 
   live:
     replicas: 1
-    image: makeplane/plane-live:stable
+    image: makeplane/plane-backend:0.21.0
     pullPolicy: Always
 
   api:
     replicas: 1
-    image: makeplane/plane-backend:stable
+    image: makeplane/plane-backend:0.21.0
     pullPolicy: Always
 
   worker:
     replicas: 1
-    image: makeplane/plane-backend:stable
+    image: makeplane/plane-backend:0.21.0
     pullPolicy: Always
 
   beatworker:
     replicas: 1
-    image: makeplane/plane-backend:stable
+    image: makeplane/plane-backend:0.21.0
     pullPolicy: Always
 
   silo:
     enabled: true
     replicas: 1
-    image: makeplane/plane-backend:stable
+    image: makeplane/plane-backend:0.21.0
     pullPolicy: Always
     connectors:
       slack:
