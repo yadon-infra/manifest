@@ -60,14 +60,6 @@ services:
 
   minio:
     local_setup: false
-    image: minio/minio:latest
-    image_mc: minio/mc:latest
-    volumeSize: 0Gi
-    pullPolicy: IfNotPresent
-    root_user: ""
-    root_password: ""
-    env:
-      minio_endpoint_ssl: false
 
   iframely:
     enabled: false
