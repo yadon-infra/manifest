@@ -7,9 +7,9 @@ generators:
   - ksops-generator.yaml
 
 helmCharts:
-  - name: plane-enterprise
+  - name: plane-ce
     repo: https://helm.plane.so
-    version: v1.17.0
+    version: 1.4.0
     releaseName: plane
     namespace: plane
     valuesFile: values.yaml

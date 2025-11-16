@@ -1,294 +1,162 @@
-planeVersion: v1.17.0
+planeVersion: v1.4.0
 
 dockerRegistry:
   enabled: false
-  registry: 'index.docker.io/v1/'
-  loginid: ''
-  password: ''
+  host: "index.docker.io/v1/"
+  loginid: ""
+  password: ""
 
-license:
-  licenseServer: https://prime.plane.so
-  licenseDomain: 'plane.example.com'
+redis:
+  local_setup: true
+  image: valkey/valkey:7.2.11-alpine
+  servicePort: 6379
+  storageClass: ""
+  volumeSize: 100Mi
+  pullPolicy: IfNotPresent
+  assign_cluster_ip: false
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
-airgapped:
-  enabled: false
-  # The boto module used by API does not use the CA bundles in the container, so we need to
-  # mount the CA bundle into the API pod by passing it in as an environment
-  # variable. Should be the full path to the CA bundle file, e.g.
-  #
-  s3SecretName: ""
-  s3SecretKey: ""
+postgres:
+  local_setup: true
+  image: postgres:15.7-alpine
+  servicePort: 5432
+  storageClass: ""
+  volumeSize: 1Gi
+  pullPolicy: IfNotPresent
+  assign_cluster_ip: false
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
-ingress:
-  enabled: true
-  minioHost: ''
-  rabbitmqHost: ''
-  ingressClass: 'traefik'
-  ingress_annotations: { "nginx.ingress.kubernetes.io/proxy-body-size": "5m" }
+rabbitmq:
+  local_setup: true
+  image: rabbitmq:3.13.6-management-alpine
+  pullPolicy: IfNotPresent
+  servicePort: 5672
+  managementPort: 15672
+  storageClass: ""
+  volumeSize: 100Mi
+  default_user: plane
+  default_password: plane
+  external_rabbitmq_url: ''
+  assign_cluster_ip: false
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
-ssl:
-  tls_secret_name: '' # If you have a custom TLS secret name
-  # If you want to use Let's Encrypt, set createIssuer and generateCerts to true
-  createIssuer: false
-  issuer: http # Allowed : cloudflare, digitalocean, http
-  token: '' # not required for http
-  server: https://acme-v02.api.letsencrypt.org/directory
-  email: plane@example.com
-  generateCerts: false
+minio:
+  local_setup: false
 
-services:
-  redis:
-    local_setup: true
-    image: valkey/valkey:7.2.11-alpine
-    servicePort: 6379
-    volumeSize: 500Mi
-    pullPolicy: IfNotPresent
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
+web:
+  replicas: 1
+  memoryLimit: 1000Mi
+  cpuLimit: 500m
+  cpuRequest: 50m
+  memoryRequest: 50Mi
+  image: artifacts.plane.so/makeplane/plane-frontend
+  pullPolicy: Always
+  assign_cluster_ip: false
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
-  postgres:
-    local_setup: true
-    image: postgres:15.7-alpine
-    servicePort: 5432
-    volumeSize: 2Gi
-    pullPolicy: IfNotPresent
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
+space:
+  replicas: 1
+  memoryLimit: 1000Mi
+  cpuLimit: 500m
+  cpuRequest: 50m
+  memoryRequest: 50Mi
+  image: artifacts.plane.so/makeplane/plane-space
+  pullPolicy: Always
+  assign_cluster_ip: false
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
-  rabbitmq:
-    local_setup: true
-    image: rabbitmq:3.13.6-management-alpine
-    servicePort: 5672
-    managementPort: 15672
-    volumeSize: 100Mi
-    pullPolicy: IfNotPresent
-    default_user: plane
-    default_password: plane
-    external_rabbitmq_url: ''
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
+admin:
+  replicas: 1
+  memoryLimit: 1000Mi
+  cpuLimit: 500m
+  cpuRequest: 50m
+  memoryRequest: 50Mi
+  image: artifacts.plane.so/makeplane/plane-admin
+  pullPolicy: Always
+  assign_cluster_ip: false
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
-  minio:
-    local_setup: false
+live:
+  replicas: 1
+  memoryLimit: 1000Mi
+  cpuLimit: 500m
+  cpuRequest: 50m
+  memoryRequest: 50Mi
+  image: artifacts.plane.so/makeplane/plane-live
+  pullPolicy: Always
+  assign_cluster_ip: false
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
-  iframely:
-    enabled: false
-    replicas: 1
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    image: artifacts.plane.so/makeplane/iframely:v1.2.0
-    pullPolicy: Always
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
+api:
+  replicas: 1
+  memoryLimit: 1000Mi
+  cpuLimit: 500m
+  cpuRequest: 50m
+  memoryRequest: 50Mi
+  image: artifacts.plane.so/makeplane/plane-backend
+  pullPolicy: Always
+  assign_cluster_ip: false
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
-  web:
-    replicas: 1
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    image: artifacts.plane.so/makeplane/web-commercial
-    pullPolicy: Always
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
+worker:
+  replicas: 1
+  memoryLimit: 1000Mi
+  cpuLimit: 500m
+  cpuRequest: 50m
+  memoryRequest: 50Mi
+  image: artifacts.plane.so/makeplane/plane-backend
+  pullPolicy: Always
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
-  monitor:
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    image: artifacts.plane.so/makeplane/monitor-commercial
-    pullPolicy: Always
-    volumeSize: 100Mi
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
-
-  space:
-    replicas: 1
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    image: artifacts.plane.so/makeplane/space-commercial
-    pullPolicy: Always
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
-
-  admin:
-    replicas: 1
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    image: artifacts.plane.so/makeplane/admin-commercial
-    pullPolicy: Always
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
-
-  live:
-    replicas: 1
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    image: artifacts.plane.so/makeplane/live-commercial
-    pullPolicy: Always
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
-
-  api:
-    replicas: 1
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    image: artifacts.plane.so/makeplane/backend-commercial
-    pullPolicy: Always
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
-
-  worker:
-    replicas: 1
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
-
-  beatworker:
-    replicas: 1
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
-
-  silo:
-    enabled: true
-    replicas: 1
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    image: artifacts.plane.so/makeplane/silo-commercial
-    pullPolicy: Always
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
-    connectors:
-      slack:
-        enabled: false
-        client_id: ''
-        client_secret: ''
-      github:
-        enabled: false
-        client_id: ''
-        client_secret: ''
-        app_name: ''
-        app_id: ''
-        private_key: ''
-      gitlab:
-        enabled: false
-        client_id: ''
-        client_secret: ''
-
-  email_service:
-    enabled: false
-    replicas: 1
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    image: artifacts.plane.so/makeplane/email-commercial
-    pullPolicy: Always
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
-
-  outbox_poller:
-    enabled: false
-    replicas: 1
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    pullPolicy: Always
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
-
-  automation_consumer:
-    enabled: false
-    replicas: 1
-    memoryLimit: 1000Mi
-    cpuLimit: 500m
-    memoryRequest: 50Mi
-    cpuRequest: 50m
-    pullPolicy: Always
-    assign_cluster_ip: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
+beatworker:
+  replicas: 1
+  memoryLimit: 1000Mi
+  cpuLimit: 500m
+  cpuRequest: 50m
+  memoryRequest: 50Mi
+  image: artifacts.plane.so/makeplane/plane-backend
+  pullPolicy: Always
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 external_secrets:
   rabbitmq_existingSecret: ''
@@ -296,79 +164,27 @@ external_secrets:
   doc_store_existingSecret: 'plane-docstore-cred'
   app_env_existingSecret: 'plane-app-env'
   live_env_existingSecret: ''
-  silo_env_existingSecret: ''
 
 env:
-  storageClass: ''
+  pgdb_username: plane
+  pgdb_password: plane
+  pgdb_name: plane
 
-  # REDIS
-  remote_redis_url: '' #INCASE OF REMOTE REDIS ONLY
+  docstore_bucket: "uploads"
+  doc_upload_size_limit: "5242880" # 5MB
 
-  # POSTGRES DB VALUES
-  pgdb_remote_url: '' #INCASE OF REMOTE PG DB URL ONLY
-
-  # DATA STORE
-  docstore_bucket: uploads
-  doc_upload_size_limit: '5242880' # 5MB
-
-  # REQUIRED IF MINIO LOCAL SETUP IS FALSE
-  aws_access_key: ''
-  aws_secret_access_key: ''
-  aws_region: ''
-  aws_s3_endpoint_url: ''
-
-  use_storage_proxy: false
+  aws_access_key: ""
+  aws_secret_access_key: ""
+  aws_region: "us-east-1"
+  aws_s3_endpoint_url: "https://s3.yadon3141.com"
 
   secret_key: ""
-  api_key_rate_limit: "60/minute"
-
-  sentry_dsn: ''
-  sentry_environment: ''
-
-  cors_allowed_origins: ''
-  instance_admin_email: ''
-
-  live_sentry_dsn: ""
-  live_sentry_environment: ""
-  live_sentry_traces_sample_rate: ""
   live_server_secret_key: ""
-  external_iframely_url: ""
 
-  silo_envs:
-    sentry_dsn: ''
-    sentry_environment: ''
-    sentry_traces_sample_rate: ''
-    batch_size: 100
-    mq_prefetch_count: 1
-    request_interval: 400
-    hmac_secret_key: ''
-    aes_secret_key: ''
-    cors_allowed_origins: ''
+  sentry_dsn: ""
+  sentry_environment: ""
 
-  email_service_envs:
-    smtp_domain: ''
+  cors_allowed_origins: ""
+  default_cluster_domain: cluster.local
 
-  outbox_poller_envs:
-    memory_limit_mb: 400
-    interval_min: 0.25
-    interval_max: 2
-    batch_size: 250
-    memory_check_interval: 30
-    pool:
-      size: 4
-      min_size: 2
-      max_size: 10
-      timeout: 30.0
-      max_idle: 300.0
-      max_lifetime: 3600
-      reconnect_timeout: 5.0
-      health_check_interval: 60
-
-  automation_consumer_envs:
-    event_stream_queue_name: "plane.event_stream.automations"
-    event_stream_prefetch: 10
-    exchange_name: "plane.event_stream"
-    event_types: "issue"
-
-extraEnv: []
-
+  api_key_rate_limit: "60/minute"
