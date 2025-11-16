@@ -44,8 +44,6 @@ repoServer:
         - |
           set -eu
           apk add --no-cache curl
-
-          # Detect architecture
           ARCH=$(uname -m)
           case "$ARCH" in
             x86_64)
@@ -61,17 +59,13 @@ repoServer:
               exit 1
               ;;
           esac
-
-          # Install ksops
           KSOPS_VER="4.4.0"
           mkdir -p /plugins/viaduct.ai/v1/ksops
           curl -L -o /plugins/viaduct.ai/v1/ksops/ksops "https://github.com/viaduct-ai/kustomize-sops/releases/download/v${KSOPS_VER}/ksops_${KSOPS_VER}_${KSOPS_ARCH}"
           chmod +x /plugins/viaduct.ai/v1/ksops/ksops
           mkdir -p /custom-tools
           cp /plugins/viaduct.ai/v1/ksops/ksops /custom-tools/ksops
-
-          # Install sops
-          SOPS_VER="3.9.0"
+          SOPS_VER="3.11.0"
           curl -L -o /custom-tools/sops "https://github.com/getsops/sops/releases/download/v${SOPS_VER}/sops-v${SOPS_VER}.${SOPS_ARCH}"
           chmod +x /custom-tools/sops
       volumeMounts:
