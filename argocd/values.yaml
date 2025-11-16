@@ -61,12 +61,21 @@ repoServer:
           esac
           KSOPS_VER="4.4.0"
           mkdir -p /plugins/viaduct.ai/v1/ksops
-          curl -L -o /plugins/viaduct.ai/v1/ksops/ksops "https://github.com/viaduct-ai/kustomize-sops/releases/download/v${KSOPS_VER}/ksops_${KSOPS_VER}_${KSOPS_ARCH}"
+          echo "Downloading ksops from: https://github.com/viaduct-ai/kustomize-sops/releases/download/v${KSOPS_VER}/ksops_${KSOPS_VER}_${KSOPS_ARCH}"
+          if ! curl -fsSL -o /plugins/viaduct.ai/v1/ksops/ksops "https://github.com/viaduct-ai/kustomize-sops/releases/download/v${KSOPS_VER}/ksops_${KSOPS_VER}_${KSOPS_ARCH}"; then
+            echo "Failed to download ksops"
+            exit 1
+          fi
+          ls -la /plugins/viaduct.ai/v1/ksops/
           chmod +x /plugins/viaduct.ai/v1/ksops/ksops
           mkdir -p /custom-tools
           cp /plugins/viaduct.ai/v1/ksops/ksops /custom-tools/ksops
           SOPS_VER="3.11.0"
-          curl -L -o /custom-tools/sops "https://github.com/getsops/sops/releases/download/v${SOPS_VER}/sops-v${SOPS_VER}.${SOPS_ARCH}"
+          echo "Downloading sops from: https://github.com/getsops/sops/releases/download/v${SOPS_VER}/sops-v${SOPS_VER}.${SOPS_ARCH}"
+          if ! curl -fsSL -o /custom-tools/sops "https://github.com/getsops/sops/releases/download/v${SOPS_VER}/sops-v${SOPS_VER}.${SOPS_ARCH}"; then
+            echo "Failed to download sops"
+            exit 1
+          fi
           chmod +x /custom-tools/sops
       volumeMounts:
         - name: kustomize-plugins
