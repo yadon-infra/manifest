@@ -1,4 +1,4 @@
-planeVersion: 0.21.0
+planeVersion: stable
 
 dockerRegistry:
   enabled: false
@@ -60,54 +60,62 @@ services:
 
   minio:
     local_setup: false
+    image: minio/minio:latest
+    image_mc: minio/mc:latest
+    volumeSize: 0Gi
+    pullPolicy: IfNotPresent
+    root_user: ""
+    root_password: ""
+    env:
+      minio_endpoint_ssl: false
 
   iframely:
     enabled: false
 
   web:
     replicas: 1
-    image: makeplane/plane-frontend:0.21.0
+    image: makeplane/plane-frontend:stable
     pullPolicy: Always
 
   monitor:
-    image: makeplane/plane-frontend:0.21.0
+    image: makeplane/plane-frontend:stable
     pullPolicy: Always
     volumeSize: 100Mi
 
   space:
     replicas: 1
-    image: makeplane/plane-space:0.21.0
+    image: makeplane/plane-space:stable
     pullPolicy: Always
 
   admin:
     replicas: 1
-    image: makeplane/plane-admin:0.21.0
+    image: makeplane/plane-admin:stable
     pullPolicy: Always
 
   live:
     replicas: 1
-    image: makeplane/plane-backend:0.21.0
+    image: makeplane/plane-live:stable
     pullPolicy: Always
 
   api:
     replicas: 1
-    image: makeplane/plane-backend:0.21.0
+    image: makeplane/plane-backend:stable
     pullPolicy: Always
 
   worker:
     replicas: 1
-    image: makeplane/plane-backend:0.21.0
+    image: makeplane/plane-backend:stable
     pullPolicy: Always
 
   beatworker:
     replicas: 1
-    image: makeplane/plane-backend:0.21.0
+    image: makeplane/plane-backend:stable
     pullPolicy: Always
 
   silo:
     enabled: true
     replicas: 1
-    image: makeplane/plane-backend:0.21.0
+    image: makeplane/plane-backend:stable
     pullPolicy: Always
     connectors:
       slack:
