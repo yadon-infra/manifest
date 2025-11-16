@@ -7,12 +7,6 @@ repoServer:
   enabled: true
   replicas: 2
 
-  env:
-    - name: XDG_CONFIG_HOME
-      value: /.config
-    - name: SOPS_AGE_KEY_FILE
-      value: /.config/sops/age/keys.txt
-
   volumes:
     - name: custom-tools
       emptyDir: {}
@@ -22,10 +16,27 @@ repoServer:
 
   initContainers:
     - name: install-ksops
-      image: viaductoss/ksops:v3.0.2
+      image: viaductoss/ksops:v4.3.3
       command: ["/bin/sh", "-c"]
       args:
-        - 'echo "Installing KSOPS..."; cp ksops /custom-tools/; cp $GOPATH/bin/kustomize /custom-tools/; echo "Done.";'
+        - |
+          echo "Installing KSOPS...";
+          mv ksops /custom-tools/;
+          mv kustomize /custom-tools/;
+          echo "Done.";
+      volumeMounts:
+        - mountPath: /custom-tools
+          name: custom-tools
+    - name: install-sops
+      image: alpine/curl:8.12.0
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          echo "Installing SOPS...";
+          curl -L https://github.com/getsops/sops/releases/download/v3.9.4/sops-v3.9.4.linux.amd64 -o sops;
+          chmod +x sops;
+          mv sops /custom-tools/;
+          echo "Done.";
       volumeMounts:
         - mountPath: /custom-tools
           name: custom-tools
@@ -34,12 +45,14 @@ repoServer:
     - mountPath: /usr/local/bin/kustomize
       name: custom-tools
       subPath: kustomize
-    - mountPath: /.config/kustomize/plugin/viaduct.ai/v1/ksops/ksops
+    - mountPath: /usr/local/bin/ksops
       name: custom-tools
       subPath: ksops
-    - mountPath: /.config/sops/age/keys.txt
-      name: sops-age
-      subPath: keys.txt
+    - mountPath: /usr/local/bin/sops
+      name: custom-tools
+      subPath: sops
+    - name: sops-age
+      mountPath: /home/argocd/.config/sops/age/
         
 server:
   extraArgs:
