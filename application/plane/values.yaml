@@ -74,32 +74,32 @@ services:
 
   web:
     replicas: 1
-    image: artifacts.plane.so/makeplane/web-commercial
+    image: makeplane/plane-frontend:v1.15.0
     pullPolicy: Always
 
   monitor:
-    image: artifacts.plane.so/makeplane/monitor-commercial
+    image: makeplane/plane-frontend:v1.15.0
     pullPolicy: Always
     volumeSize: 100Mi
 
   space:
     replicas: 1
-    image: artifacts.plane.so/makeplane/space-commercial
+    image: makeplane/plane-space:v1.15.0
     pullPolicy: Always
 
   admin:
     replicas: 1
-    image: artifacts.plane.so/makeplane/admin-commercial
+    image: makeplane/plane-admin:v1.15.0
     pullPolicy: Always
 
   live:
     replicas: 1
-    image: artifacts.plane.so/makeplane/live-commercial
+    image: makeplane/plane-live:v1.15.0
     pullPolicy: Always
 
   api:
     replicas: 1
-    image: artifacts.plane.so/makeplane/backend-commercial
+    image: makeplane/plane-backend:v1.15.0
     pullPolicy: Always
 
   worker:
@@ -111,7 +111,7 @@ services:
   silo:
     enabled: true
     replicas: 1
-    image: artifacts.plane.so/makeplane/silo-commercial
+    image: makeplane/plane-backend:v1.15.0
     pullPolicy: Always
     connectors:
       slack:
