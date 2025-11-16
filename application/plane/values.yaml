@@ -54,7 +54,7 @@ rabbitmq:
 
 minio:
   local_setup: false
-  
+
 web:
   replicas: 1
   memoryLimit: 1000Mi
@@ -160,7 +160,7 @@ beatworker:
 
 external_secrets:
   rabbitmq_existingSecret: ''
-  pgdb_existingSecret: ''
+  pgdb_existingSecret: 'plane-pgdb-cred'
   doc_store_existingSecret: 'plane-docstore-cred'
   app_env_existingSecret: 'plane-app-env'
   live_env_existingSecret: ''
