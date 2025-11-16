@@ -8,7 +8,7 @@ generators:
 
 helmCharts:
   - name: plane-ce
-    repo: https://prime.plane.so
+    repo: https://helm.plane.so
     version: 1.17.0
     releaseName: plane
     namespace: plane
