@@ -9,3 +9,4 @@ metadata:
 files:
     - secret-datastore.yaml
     - secret-app.yaml
+    - secret-psql.yaml
