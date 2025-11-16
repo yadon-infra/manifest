@@ -8,8 +8,8 @@ generators:
 
 helmCharts:
   - name: plane-ce
-    repo: https://helm.plane.so/
-    version: 1.1.0
+    repo: https://prime.plane.so
+    version: 1.17.0
     releaseName: plane
     namespace: plane
     valuesFile: values.yaml

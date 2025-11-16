@@ -23,7 +23,7 @@ ingress:
   enabled: true
   minioHost: ''
   rabbitmqHost: ''
-  ingressClass: 'nginx'
+  ingressClass: 'traefik'
   ingress_annotations: { "nginx.ingress.kubernetes.io/proxy-body-size": "5m" }
 
 ssl:
@@ -81,21 +81,7 @@ services:
     annotations: {}
 
   minio:
-    local_setup: true
-    image: minio/minio:latest
-    image_mc: minio/mc:latest
-    volumeSize: 3Gi
-    pullPolicy: IfNotPresent
-    root_user: admin
-    root_password: password
-    assign_cluster_ip: false
-    env:
-      minio_endpoint_ssl: false
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    labels: {}
-    annotations: {}
+    local_setup: false
 
   iframely:
     enabled: false
@@ -305,11 +291,10 @@ services:
     annotations: {}
 
 external_secrets:
-  # Name of the existing Kubernetes Secret resource; see README for more details
   rabbitmq_existingSecret: ''
-  pgdb_existingSecret: ''
-  doc_store_existingSecret: ''
-  app_env_existingSecret: ''
+  pgdb_existingSecret: 'plane-pgdb-cred'
+  doc_store_existingSecret: 'plane-docstore-cred'
+  app_env_existingSecret: 'plane-app-env'
   live_env_existingSecret: ''
   silo_env_existingSecret: ''
 
@@ -320,9 +305,6 @@ env:
   remote_redis_url: '' #INCASE OF REMOTE REDIS ONLY
 
   # POSTGRES DB VALUES
-  pgdb_username: plane
-  pgdb_password: plane
-  pgdb_name: plane
   pgdb_remote_url: '' #INCASE OF REMOTE PG DB URL ONLY
 
   # DATA STORE
@@ -337,7 +319,7 @@ env:
 
   use_storage_proxy: false
 
-  secret_key: "60gp0byfz2dvffa45cxl20p1scy9xbpf6d8c5y0geejgkyp1b5"
+  secret_key: ""
   api_key_rate_limit: "60/minute"
 
   sentry_dsn: ''
@@ -349,7 +331,7 @@ env:
   live_sentry_dsn: ""
   live_sentry_environment: ""
   live_sentry_traces_sample_rate: ""
-  live_server_secret_key: "htbqvBJAgpm9bzvf3r4urJer0ENReatceh"
+  live_server_secret_key: ""
   external_iframely_url: ""
 
   silo_envs:
@@ -360,7 +342,7 @@ env:
     mq_prefetch_count: 1
     request_interval: 400
     hmac_secret_key: ''
-    aes_secret_key: 'dsOdt7YrvxsTIFJ37pOaEVvLxN8KGBCr'
+    aes_secret_key: ''
     cors_allowed_origins: ''
 
   email_service_envs:
@@ -388,12 +370,5 @@ env:
     exchange_name: "plane.event_stream"
     event_types: "issue"
 
-# Global extra environment variables that will be applied to all workloads
 extraEnv: []
-  # - name: HTTP_PROXY
-  #   value: "http://proxy.example.com:8080"
-  # - name: HTTPS_PROXY
-  #   value: "http://proxy.example.com:8080"
-  # - name: NO_PROXY
-  #   value: "localhost,127.0.0.1,.example.com"
 
