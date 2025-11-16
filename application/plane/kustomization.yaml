@@ -9,7 +9,7 @@ generators:
 helmCharts:
   - name: plane-enterprise
     repo: https://helm.plane.so
-    version: 1.17.0
+    version: v1.17.0
     releaseName: plane
     namespace: plane
     valuesFile: values.yaml
