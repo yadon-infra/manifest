@@ -68,7 +68,22 @@ rabbitmq:
   affinity: {}
 
 minio:
+  image: minio/minio:latest
+  image_mc: minio/mc:latest
   local_setup: false
+  pullPolicy: IfNotPresent
+  root_password: password
+  root_user: admin
+  storageClass: ""
+  volumeSize: 1Gi
+  assign_cluster_ip: false
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  env:
+    minio_endpoint_ssl: false
 
 web:
   replicas: 1
@@ -183,6 +198,10 @@ external_secrets:
 env:
   remote_redis_url: "" #INCASE OF REMOTE REDIS ONLY
 
+  # POSTGRES DB VALUES
+  pgdb_username: plane
+  pgdb_password: plane
+  pgdb_name: plane
   pgdb_remote_url: "" #INCASE OF REMOTE PG DB URL ONLY
 
   docstore_bucket: "uploads"
@@ -190,6 +209,9 @@ env:
 
   aws_region: "us-east-1"
   aws_s3_endpoint_url: "https://s3.yadon3141.com"
+
+  secret_key: "60gp0byfz2dvffa45cxl20p1scy9xbpf6d8c5y0geejgkyp1b5"
+  live_server_secret_key: "htbqvBJAgpm9bzvf3r4urJer0ENReatceh"
 
   sentry_dsn: ""
   sentry_environment: ""
