@@ -216,6 +216,7 @@ env:
   docstore_bucket: "uploads"
   doc_upload_size_limit: "5242880" # 5MB
 
+  # REQUIRED IF MINIO LOCAL SETUP IS FALSE
   aws_access_key: ""
   aws_secret_access_key: ""
   aws_region: ""
