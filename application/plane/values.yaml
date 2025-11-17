@@ -190,9 +190,9 @@ beatworker:
 
 external_secrets:
   rabbitmq_existingSecret: ''
-  pgdb_existingSecret: 'plane-pgdb-cred'
+  pgdb_existingSecret: ''
   doc_store_existingSecret: 'plane-docstore-cred'
-  app_env_existingSecret: 'plane-app-env'
+  app_env_existingSecret: ''
   live_env_existingSecret: ''
 
 env:
