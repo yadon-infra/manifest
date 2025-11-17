@@ -8,16 +8,12 @@ dockerRegistry:
 
 ingress:
   enabled: true
-  appHost: "plane.example.com"
-  minioHost: ""
-  rabbitmqHost: ""
-  ingressClass: "nginx"
+  appHost: "plane.yadon3141.com"
+  ingressClass: "traefik"
   ingress_annotations: { "nginx.ingress.kubernetes.io/proxy-body-size": "5m" }
 
-# SSL Configuration - Valid only if ingress.enabled is true
 ssl:
   tls_secret_name: "" # If you have a custom TLS secret name
-  # If you want to use Let's Encrypt, set createIssuer and generateCerts to true
   createIssuer: false
   issuer: "http" # Allowed : cloudflare, digitalocean, http
   token: "" # not required for http
@@ -72,22 +68,7 @@ rabbitmq:
   affinity: {}
 
 minio:
-  image: minio/minio:latest
-  image_mc: minio/mc:latest
-  local_setup: true
-  pullPolicy: IfNotPresent
-  root_password: password
-  root_user: admin
-  storageClass: ""
-  volumeSize: 1Gi
-  assign_cluster_ip: false
-  labels: {}
-  annotations: {}
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-  env:
-    minio_endpoint_ssl: false
+  local_setup: false
 
 web:
   replicas: 1
@@ -193,17 +174,13 @@ beatworker:
   affinity: {}
 
 external_secrets:
-  # Name of the existing Kubernetes Secret resource; see README for more details
   rabbitmq_existingSecret: ''
-  pgdb_existingSecret: ''
-  doc_store_existingSecret: ''
-  app_env_existingSecret: ''
+  pgdb_existingSecret: 'plane-pgdb-cred'
+  doc_store_existingSecret: 'plane-docstore-cred'
+  app_env_existingSecret: 'plane-app-env'
   live_env_existingSecret: ''
 
 env:
-
-  # NEXT_PUBLIC_DEPLOY_URL:  ""
-  # REDIS
   remote_redis_url: "" #INCASE OF REMOTE REDIS ONLY
 
   # POSTGRES DB VALUES
@@ -212,15 +189,11 @@ env:
   pgdb_name: plane
   pgdb_remote_url: "" #INCASE OF REMOTE PG DB URL ONLY
 
-  # DATA STORE
   docstore_bucket: "uploads"
   doc_upload_size_limit: "5242880" # 5MB
 
-  # REQUIRED IF MINIO LOCAL SETUP IS FALSE
-  aws_access_key: ""
-  aws_secret_access_key: ""
-  aws_region: ""
-  aws_s3_endpoint_url: ""
+  aws_region: "us-east-1"
+  aws_s3_endpoint_url: "https://s3.yadon3141.com"
 
   secret_key: "60gp0byfz2dvffa45cxl20p1scy9xbpf6d8c5y0geejgkyp1b5"
   live_server_secret_key: "htbqvBJAgpm9bzvf3r4urJer0ENReatceh"
@@ -232,3 +205,4 @@ env:
   default_cluster_domain: cluster.local
 
   api_key_rate_limit: "60/minute"
+
