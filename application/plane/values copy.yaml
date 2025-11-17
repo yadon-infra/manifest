@@ -1,25 +1,10 @@
-planeVersion: v1.1.0
+planeVersion: v1.4.0
 
 dockerRegistry:
   enabled: false
   host: "index.docker.io/v1/"
   loginid: ""
   password: ""
-
-ingress:
-  enabled: true
-  appHost: "plane.yadon3141.com"
-  ingressClass: "traefik"
-  ingress_annotations: { "nginx.ingress.kubernetes.io/proxy-body-size": "5m" }
-
-ssl:
-  tls_secret_name: "" # If you have a custom TLS secret name
-  createIssuer: false
-  issuer: "http" # Allowed : cloudflare, digitalocean, http
-  token: "" # not required for http
-  server: https://acme-v02.api.letsencrypt.org/directory
-  email: plane@example.com
-  generateCerts: false
 
 redis:
   local_setup: true
@@ -181,15 +166,20 @@ external_secrets:
   live_env_existingSecret: ''
 
 env:
-  remote_redis_url: "" #INCASE OF REMOTE REDIS ONLY
-
-  pgdb_remote_url: "" #INCASE OF REMOTE PG DB URL ONLY
+  pgdb_username: plane
+  pgdb_password: plane
+  pgdb_name: plane
 
   docstore_bucket: "uploads"
   doc_upload_size_limit: "5242880" # 5MB
 
+  aws_access_key: ""
+  aws_secret_access_key: ""
   aws_region: "us-east-1"
   aws_s3_endpoint_url: "https://s3.yadon3141.com"
+
+  secret_key: ""
+  live_server_secret_key: ""
 
   sentry_dsn: ""
   sentry_environment: ""
@@ -198,4 +188,3 @@ env:
   default_cluster_domain: cluster.local
 
   api_key_rate_limit: "60/minute"
-
