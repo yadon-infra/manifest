@@ -5,7 +5,7 @@ namespace: vikunja
 
 helmCharts:
 - name: vikunja
-  repo: oci://ghcr.io/go-vikunja/helm-chart/vikunja
+  repo: oci://ghcr.io/go-vikunja/helm-chart
   version: 1.0.0
   releaseName: vikunja
   namespace: vikunja
