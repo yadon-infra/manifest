@@ -7,78 +7,52 @@ repoServer:
   enabled: true
   replicas: 2
 
-  env:
-    - name: XDG_CONFIG_HOME
-      value: /home/argocd/.config
-    - name: KUSTOMIZE_PLUGIN_HOME
-      value: /home/argocd/.config/kustomize/plugin
-    - name: SOPS_AGE_KEY_FILE
-      value: /home/argocd/.config/sops/age/keys.txt
-    - name: PATH
-      value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/custom-tools
-
   volumes:
-    - name: kustomize-plugins
+    - name: custom-tools
       emptyDir: {}
     - name: sops-age
       secret:
         secretName: sops-age-key
-    - name: custom-tools
-      emptyDir: {}
-
-  volumeMounts:
-    - name: kustomize-plugins
-      mountPath: /home/argocd/.config/kustomize/plugin
-    - name: sops-age
-      mountPath: /home/argocd/.config/sops/age
-      readOnly: true
-    - name: custom-tools
-      mountPath: /custom-tools
-      readOnly: true
 
   initContainers:
-    - name: install-ksops-sops
-      image: alpine:3.20
-      command: [sh, -c]
+    - name: install-ksops
+      image: viaductoss/ksops:v4.3.3
+      command: ["/bin/sh", "-c"]
       args:
         - |
-          set -eu
-          apk add --no-cache curl
-
-          # Detect architecture
-          ARCH=$(uname -m)
-          case "$ARCH" in
-            x86_64)
-              KSOPS_ARCH="linux_amd64"
-              SOPS_ARCH="linux.amd64"
-              ;;
-            aarch64|arm64)
-              KSOPS_ARCH="linux_arm64"
-              SOPS_ARCH="linux.arm64"
-              ;;
-            *)
-              echo "Unsupported architecture: $ARCH"
-              exit 1
-              ;;
-          esac
-
-          # Install ksops
-          KSOPS_VER="4.4.0"
-          mkdir -p /plugins/viaduct.ai/v1/ksops
-          curl -L -o /plugins/viaduct.ai/v1/ksops/ksops "https://github.com/viaduct-ai/kustomize-sops/releases/download/v${KSOPS_VER}/ksops_${KSOPS_VER}_${KSOPS_ARCH}"
-          chmod +x /plugins/viaduct.ai/v1/ksops/ksops
-          mkdir -p /custom-tools
-          cp /plugins/viaduct.ai/v1/ksops/ksops /custom-tools/ksops
-
-          # Install sops
-          SOPS_VER="3.9.0"
-          curl -L -o /custom-tools/sops "https://github.com/getsops/sops/releases/download/v${SOPS_VER}/sops-v${SOPS_VER}.${SOPS_ARCH}"
-          chmod +x /custom-tools/sops
+          echo "Installing KSOPS...";
+          mv ksops /custom-tools/;
+          mv kustomize /custom-tools/;
+          echo "Done.";
       volumeMounts:
-        - name: kustomize-plugins
-          mountPath: /plugins
-        - name: custom-tools
-          mountPath: /custom-tools
+        - mountPath: /custom-tools
+          name: custom-tools
+    - name: install-sops
+      image: alpine/curl:8.12.0
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          echo "Installing SOPS...";
+          curl -L https://github.com/getsops/sops/releases/download/v3.9.4/sops-v3.9.4.linux.amd64 -o sops;
+          chmod +x sops;
+          mv sops /custom-tools/;
+          echo "Done.";
+      volumeMounts:
+        - mountPath: /custom-tools
+          name: custom-tools
+
+  volumeMounts:
+    - mountPath: /usr/local/bin/kustomize
+      name: custom-tools
+      subPath: kustomize
+    - mountPath: /usr/local/bin/ksops
+      name: custom-tools
+      subPath: ksops
+    - mountPath: /usr/local/bin/sops
+      name: custom-tools
+      subPath: sops
+    - name: sops-age
+      mountPath: /home/argocd/.config/sops/age/
         
 server:
   extraArgs:
