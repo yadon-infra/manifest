@@ -1,21 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: minio-operator
+  name: argocd
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/seipan/infra
     targetRevision: main
-    path: db/minio-operator
+    path: k8s/argocd
   destination:
     server: https://kubernetes.default.svc
-    namespace: minio-operator
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
       - ServerSideApply=true

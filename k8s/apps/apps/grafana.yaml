@@ -1,24 +1,29 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root-app
+  name: grafana
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
     repoURL: https://github.com/seipan/infra
     targetRevision: main
-    path: apps
-    directory:
-      recurse: true
+    path: k8s/monitor/grafana
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: grafana
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+  ignoreDifferences:
+    - group: ""
+      kind: Service
+      name: grafana
+    - group: networking.k8s.io
+      kind: Ingress
+      name: grafana

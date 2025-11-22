@@ -1,20 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cilium
+  name: vikunja
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/seipan/infra
     targetRevision: main
-    path: cilium
+    path: k8s/application/vikunja
   destination:
     server: https://kubernetes.default.svc
-    namespace: kube-system
+    namespace: vikunja
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
+      - CreateNamespace=true
       - ServerSideApply=true

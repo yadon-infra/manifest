@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: minio
+  name: cloudflared
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/seipan/infra
     targetRevision: main
-    path: db/minio
+    path: k8s/cloudflared
   destination:
     server: https://kubernetes.default.svc
-    namespace: minio
+    namespace: cloudflared
   syncPolicy:
     automated:
       prune: true
@@ -19,8 +19,3 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
-  ignoreDifferences:
-    - group: apps
-      kind: StatefulSet
-      jsonPointers:
-        - /spec/volumeClaimTemplates

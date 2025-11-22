@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: longhorn
+  name: minio-operator
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/seipan/infra
     targetRevision: main
-    path: longhorn
+    path: k8s/db/minio-operator
   destination:
     server: https://kubernetes.default.svc
-    namespace: longhorn-system
+    namespace: minio-operator
   syncPolicy:
     automated:
       prune: true
@@ -19,5 +19,3 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
-      - RespectIgnoreDifferences=true
-      
