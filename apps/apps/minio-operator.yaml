@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/yadon-infra/manifest
+    repoURL: https://github.com/seipan/infra
     targetRevision: main
     path: db/minio-operator
   destination:
