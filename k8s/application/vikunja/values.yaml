@@ -76,7 +76,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: "sha256-356b185afea9f1bb14702f74740d863cf0f08116f937545fec288ac0184c0122"   
+    tag: "latest"   
     pullPolicy: IfNotPresent
   primary:
     networkPolicy:
