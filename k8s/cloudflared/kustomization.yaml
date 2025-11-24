@@ -4,6 +4,14 @@ kind: Kustomization
 generators:
   - ksops-generator.yaml
 
+configMapGenerator:
+  - name: cloudflared-config
+    files:
+      - config.yaml
+
+generatorOptions:
+  disableNameSuffixHash: false  
+
 resources:
   - deployment.yaml
   - config.yaml
