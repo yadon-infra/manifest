@@ -3,6 +3,9 @@ kind: Kustomization
 
 namespace: harbor
 
+generators:
+  - ksops-generator.yaml
+
 helmCharts:
   - name: harbor
     repo: https://helm.goharbor.io
@@ -10,3 +13,6 @@ helmCharts:
     releaseName: harbor
     namespace: harbor
     valuesFile: values.yaml
+
+resources:
+  - ingress.yaml
