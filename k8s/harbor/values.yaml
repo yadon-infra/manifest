@@ -142,6 +142,8 @@ nginx:
   automountServiceAccountToken: false
   replicas: 1
   revisionHistoryLimit: 1
+  nodeSelector:
+    kubernetes.io/arch: amd64
 
 portal:
   image:
@@ -153,18 +155,26 @@ portal:
   automountServiceAccountToken: false
   replicas: 1
   revisionHistoryLimit: 10
+  nodeSelector:
+    kubernetes.io/arch: amd64
 
 core:
   image:
     repository: goharbor/harbor-core
     tag: v2.14.0
+  nodeSelector:
+    kubernetes.io/arch: amd64
 
 jobservice:
   image:
     repository: goharbor/harbor-jobservice
     tag: v2.14.0
+  nodeSelector:
+    kubernetes.io/arch: amd64
 
 registry:
+  nodeSelector:
+    kubernetes.io/arch: amd64
   registry:
     image:
       repository: goharbor/registry-photon
@@ -190,11 +200,15 @@ trivy:
     repository: goharbor/trivy-adapter-photon
     # tag the tag for Trivy adapter image
     tag: v2.14.0
+  nodeSelector:
+    kubernetes.io/arch: amd64
 
 database:
   # if external database is used, set "type" to "external"
   # and fill the connection information in "external" section
   type: internal
+  nodeSelector:
+    kubernetes.io/arch: amd64
   internal:
     image:
       repository: goharbor/harbor-db
@@ -218,6 +232,8 @@ redis:
   # if external Redis is used, set "type" to "external"
   # and fill the connection information in "external" section
   type: internal
+  nodeSelector:
+    kubernetes.io/arch: amd64
   internal:
     image:
       repository: goharbor/redis-photon
@@ -234,3 +250,5 @@ exporter:
   revisionHistoryLimit: 10
   cacheDuration: 23
   cacheCleanInterval: 14400
+  nodeSelector:
+    kubernetes.io/arch: amd64
