@@ -169,6 +169,7 @@ jobservice:
   image:
     repository: goharbor/harbor-jobservice
     tag: v2.14.0
+  replicas: 1
   nodeSelector:
     kubernetes.io/arch: amd64
 
