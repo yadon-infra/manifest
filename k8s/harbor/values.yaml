@@ -210,6 +210,16 @@ database:
   type: internal
   nodeSelector:
     kubernetes.io/arch: amd64
+  securityContext:
+    runAsUser: 999
+    runAsGroup: 999
+    fsGroup: 999
+  initContainer:
+    migrator: {}
+    permissions:
+      enabled: true
+      securityContext:
+        runAsUser: 0
   internal:
     image:
       repository: goharbor/harbor-db
