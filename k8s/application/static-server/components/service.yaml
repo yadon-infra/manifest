@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: static-server
+  namespace: default
+  labels:
+    app: static-server
+spec:
+  selector:
+    app: static-server
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+  type: ClusterIP
