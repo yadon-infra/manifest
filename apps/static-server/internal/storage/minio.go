@@ -35,7 +35,6 @@ func (m *MinioStorage) GetObject(ctx context.Context, bucket, objectName string)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get object: %w", err)
 	}
-
 	return object, nil
 }
 

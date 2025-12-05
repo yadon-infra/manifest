@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 	"strconv"
 	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/yamasaki/static-server/internal/handler"
 	"github.com/yamasaki/static-server/internal/storage"
@@ -35,50 +34,35 @@ func main() {
 
 	staticHandler := handler.NewStaticHandler(minioStorage, logger)
 
-	r := mux.NewRouter()
-	r.PathPrefix("/").Handler(staticHandler)
-
-	srv := &http.Server{
-		Handler:      loggingMiddleware(logger)(r),
-		Addr:         fmt.Sprintf(":%s", port),
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
-	}
+	gin.SetMode(gin.ReleaseMode)
+	r := gin.New()
+	
+	r.Use(loggingMiddleware(logger))
+	r.Use(gin.Recovery())
+	
+	r.NoRoute(staticHandler.ServeFiles)
 
 	logger.WithField("port", port).Info("Starting server")
-	if err := srv.ListenAndServe(); err != nil {
+	if err := r.Run(fmt.Sprintf(":%s", port)); err != nil {
 		logger.WithError(err).Fatal("Server failed")
 	}
 }
 
-func loggingMiddleware(logger *logrus.Logger) func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			start := time.Now()
-			
-			wrapped := &responseWriter{ResponseWriter: w, statusCode: http.StatusOK}
-			next.ServeHTTP(wrapped, r)
-			
-			logger.WithFields(logrus.Fields{
-				"method":     r.Method,
-				"path":       r.URL.Path,
-				"host":       r.Host,
-				"status":     wrapped.statusCode,
-				"duration":   time.Since(start).Milliseconds(),
-				"user_agent": r.UserAgent(),
-			}).Info("Request handled")
-		})
+func loggingMiddleware(logger *logrus.Logger) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		start := time.Now()
+		
+		c.Next()
+		
+		logger.WithFields(logrus.Fields{
+			"method":     c.Request.Method,
+			"path":       c.Request.URL.Path,
+			"host":       c.Request.Host,
+			"status":     c.Writer.Status(),
+			"duration":   time.Since(start).Milliseconds(),
+			"user_agent": c.Request.UserAgent(),
+		}).Info("Request handled")
 	}
-}
-
-type responseWriter struct {
-	http.ResponseWriter
-	statusCode int
-}
-
-func (rw *responseWriter) WriteHeader(code int) {
-	rw.statusCode = code
-	rw.ResponseWriter.WriteHeader(code)
 }
 
 func getEnv(key, defaultValue string) string {

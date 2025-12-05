@@ -7,6 +7,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/yamasaki/static-server/internal/storage"
 )
@@ -23,23 +24,21 @@ func NewStaticHandler(storage *storage.MinioStorage, logger *logrus.Logger) *Sta
 	}
 }
 
-func (h *StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	host := r.Host
-	
+func (h *StaticHandler) ServeFiles(c *gin.Context) {
+	host := c.Request.Host
 	bucket := extractBucketFromHost(host)
 	if bucket == "" {
 		h.logger.WithField("host", host).Error("Could not extract bucket from host")
-		http.Error(w, "Invalid host", http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid host"})
 		return
 	}
-
-	objectPath := strings.TrimPrefix(r.URL.Path, "/")
+	objectPath := strings.TrimPrefix(c.Request.URL.Path, "/")
 	if objectPath == "" || strings.HasSuffix(objectPath, "/") {
 		objectPath = path.Join(objectPath, "index.html")
 	}
 
 	ctx := context.Background()
-	
+
 	if !h.storage.ObjectExists(ctx, bucket, objectPath) {
 		if !strings.HasSuffix(objectPath, ".html") {
 			htmlPath := objectPath + ".html"
@@ -50,7 +49,7 @@ func (h *StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					"bucket": bucket,
 					"object": objectPath,
 				}).Warn("Object not found")
-				http.Error(w, "Not found", http.StatusNotFound)
+				c.JSON(http.StatusNotFound, gin.H{"error": "Not found"})
 				return
 			}
 		} else {
@@ -58,7 +57,7 @@ func (h *StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				"bucket": bucket,
 				"object": objectPath,
 			}).Warn("Object not found")
-			http.Error(w, "Not found", http.StatusNotFound)
+			c.JSON(http.StatusNotFound, gin.H{"error": "Not found"})
 			return
 		}
 	}
@@ -66,16 +65,14 @@ func (h *StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	object, err := h.storage.GetObject(ctx, bucket, objectPath)
 	if err != nil {
 		h.logger.WithError(err).Error("Failed to get object from storage")
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
 	defer object.Close()
-
 	contentType := getContentType(objectPath)
-	w.Header().Set("Content-Type", contentType)
-	w.Header().Set("Cache-Control", "public, max-age=3600")
-
-	if _, err := io.Copy(w, object); err != nil {
+	c.Header("Content-Type", contentType)
+	c.Header("Cache-Control", "public, max-age=3600")
+	if _, err := io.Copy(c.Writer, object); err != nil {
 		h.logger.WithError(err).Error("Failed to write response")
 	}
 }
