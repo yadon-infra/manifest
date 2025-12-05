@@ -9,17 +9,17 @@ TAG="${1:-latest}"
 
 FULL_IMAGE_NAME="${REGISTRY}/${PROJECT}/${IMAGE_NAME}:${TAG}"
 
-echo "Building Docker image: ${FULL_IMAGE_NAME}"
-docker build -t "${FULL_IMAGE_NAME}" .
+echo "Building container image: ${FULL_IMAGE_NAME}"
+nerdctl build -t "${FULL_IMAGE_NAME}" .
 
-echo "Pushing Docker image to Harbor..."
+echo "Pushing container image to Harbor..."
 echo "Please make sure you are logged in to Harbor:"
-echo "  docker login ${REGISTRY}"
+echo "  nerdctl login ${REGISTRY}"
 echo ""
 echo "Press Enter to continue or Ctrl+C to cancel..."
 read
 
-docker push "${FULL_IMAGE_NAME}"
+nerdctl push "${FULL_IMAGE_NAME}"
 
 echo "Successfully pushed ${FULL_IMAGE_NAME}"
 echo ""

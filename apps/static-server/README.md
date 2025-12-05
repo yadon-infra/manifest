@@ -12,7 +12,7 @@ MinIOベースの静的ファイル配信サーバー
 ## ビルドとデプロイ
 
 ```bash
-# Dockerイメージのビルド
+# コンテナイメージのビルド (要nerdctl)
 cd apps/static-server
 ./build-and-push.sh [TAG]
 
@@ -23,8 +23,13 @@ kubectl apply -k k8s/application/static-server/
 
 ## 環境変数
 
-- `MINIO_ENDPOINT`: MinIOエンドポイント
+- `MINIO_ENDPOINT`: MinIOエンドポイント (デフォルト: minio.minio.svc.cluster.local:9000)
 - `MINIO_ACCESS_KEY`: アクセスキー
 - `MINIO_SECRET_KEY`: シークレットキー
 - `MINIO_USE_SSL`: SSL使用フラグ (true/false)
 - `PORT`: サーバーポート (デフォルト: 8080)
+
+## 必要なツール
+
+- nerdctl: containerdを使用したコンテナビルド用
+- kubectl: Kubernetesへのデプロイ用

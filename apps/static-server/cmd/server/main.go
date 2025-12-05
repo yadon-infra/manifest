@@ -17,7 +17,7 @@ func main() {
 	logger.SetFormatter(&logrus.JSONFormatter{})
 	logger.SetLevel(logrus.InfoLevel)
 
-	endpoint := getEnv("MINIO_ENDPOINT", "minio:9000")
+	endpoint := getEnv("MINIO_ENDPOINT", "minio.minio.svc.cluster.local:9000")
 	accessKey := getEnv("MINIO_ACCESS_KEY", "")
 	secretKey := getEnv("MINIO_SECRET_KEY", "")
 	useSSL := getEnvBool("MINIO_USE_SSL", false)
