@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"io"
 	"net/http"
 	"path"
@@ -37,12 +36,10 @@ func (h *StaticHandler) ServeFiles(c *gin.Context) {
 		objectPath = path.Join(objectPath, "index.html")
 	}
 
-	ctx := context.Background()
-
-	if !h.storage.ObjectExists(ctx, bucket, objectPath) {
+	if !h.storage.ObjectExists(c, bucket, objectPath) {
 		if !strings.HasSuffix(objectPath, ".html") {
 			htmlPath := objectPath + ".html"
-			if h.storage.ObjectExists(ctx, bucket, htmlPath) {
+			if h.storage.ObjectExists(c, bucket, htmlPath) {
 				objectPath = htmlPath
 			} else {
 				h.logger.WithFields(logrus.Fields{
@@ -62,7 +59,7 @@ func (h *StaticHandler) ServeFiles(c *gin.Context) {
 		}
 	}
 
-	object, err := h.storage.GetObject(ctx, bucket, objectPath)
+	object, err := h.storage.GetObject(c, bucket, objectPath)
 	if err != nil {
 		h.logger.WithError(err).Error("Failed to get object from storage")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})

@@ -11,12 +11,24 @@ MinIOベースの静的ファイル配信サーバー
 
 ## ビルドとデプロイ
 
+### 方法1: sudoを使用する場合
 ```bash
-# コンテナイメージのビルド (要nerdctl)
 cd apps/static-server
-./build-and-push.sh [TAG]
+./build-and-push-sudo.sh [TAG]
+```
 
-# Kubernetesへのデプロイ
+### 方法2: Rootless Containerdを使用する場合
+```bash
+# 初回のみ: Rootless Containerdのセットアップ
+./setup-rootless-containerd.sh
+source ~/.bashrc  # または ~/.zshrc
+
+# ビルドとプッシュ
+./build-and-push.sh [TAG]
+```
+
+### Kubernetesへのデプロイ
+```bash
 kubectl apply -f k8s/default/secret/minio-static-server.yaml
 kubectl apply -k k8s/application/static-server/
 ```

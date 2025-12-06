@@ -10,16 +10,16 @@ TAG="${1:-latest}"
 FULL_IMAGE_NAME="${REGISTRY}/${PROJECT}/${IMAGE_NAME}:${TAG}"
 
 echo "Building container image: ${FULL_IMAGE_NAME}"
-nerdctl build -t "${FULL_IMAGE_NAME}" .
+sudo nerdctl build -t "${FULL_IMAGE_NAME}" .
 
 echo "Pushing container image to Harbor..."
 echo "Please make sure you are logged in to Harbor:"
-echo "  nerdctl login ${REGISTRY}"
+echo "  sudo nerdctl login ${REGISTRY}"
 echo ""
 echo "Press Enter to continue or Ctrl+C to cancel..."
 read
 
-nerdctl push "${FULL_IMAGE_NAME}"
+sudo nerdctl push "${FULL_IMAGE_NAME}"
 
 echo "Successfully pushed ${FULL_IMAGE_NAME}"
 echo ""
