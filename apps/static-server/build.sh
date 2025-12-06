@@ -2,7 +2,7 @@
 
 set -e
 
-REGISTRY="harbor.yadon3141.com"
+REGISTRY="192.168.0.55:30002"
 PROJECT="images"
 IMAGE_NAME="static-server"
 TAG="${1:-latest}"
