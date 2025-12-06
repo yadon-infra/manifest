@@ -3,7 +3,7 @@
 set -e
 
 REGISTRY="harbor.yadon3141.com"
-PROJECT="infra"
+PROJECT="images"
 IMAGE_NAME="static-server"
 TAG="${1:-latest}"
 
