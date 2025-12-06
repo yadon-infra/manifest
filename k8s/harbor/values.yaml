@@ -19,7 +19,7 @@ expose:
     # ClusterIP-specific labels
     labels: {}
 
-externalURL: https://harbor.yadon3141.com
+externalURL: http://192.168.0.55:30002
 
 
 persistence:
