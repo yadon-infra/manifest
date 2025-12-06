@@ -19,7 +19,7 @@ expose:
     # ClusterIP-specific labels
     labels: {}
 
-externalURL: https://harbor.yadon3141.com
+externalURL: http://192.168.0.55:30002
 
 
 persistence:
@@ -81,8 +81,10 @@ persistence:
     type: s3
     s3:
       existingSecret: "storage"
-      region: us-west-1
+      region: us-east-1
       bucket: harbor
+      regionendpoint: http://myminio-hl.minio.svc.cluster.local:9000
+      secure: false
 
 # The initial password of Harbor admin. Change it from portal after launching Harbor
 # or give an existing secret for it
