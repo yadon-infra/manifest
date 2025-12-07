@@ -185,6 +185,7 @@ registry:
     image:
       repository: goharbor/harbor-registryctl
       tag: v2.14.0
+  relativeurls: true
   credentials:
     username: "user"
     password: "password"
