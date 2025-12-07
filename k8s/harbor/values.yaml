@@ -5,10 +5,8 @@ expose:
   tls:
     enabled: false
 
-  clusterIP:
+  nodePort:
     name: harbor
-    # The ip address of the ClusterIP service (leave empty for acquiring dynamic ip)
-    staticClusterIP: ""
     ports:
       # The service port Harbor listens on when serving HTTP
       httpPort: 80
