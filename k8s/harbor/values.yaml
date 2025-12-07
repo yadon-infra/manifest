@@ -82,7 +82,7 @@ persistence:
       region: us-east-1
       bucket: harbor
       regionendpoint: http://minio.minio.svc.cluster.local
-      secure: true
+      secure: false
       v4auth: true
 
 # The initial password of Harbor admin. Change it from portal after launching Harbor
