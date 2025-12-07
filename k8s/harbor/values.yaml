@@ -144,6 +144,9 @@ nginx:
   revisionHistoryLimit: 1
   nodeSelector:
     kubernetes.io/arch: amd64
+  extraConfig: |
+    # Disable internal overwriting of X-Forwarded-Proto
+    proxy_set_header X-Forwarded-Proto "";
 
 portal:
   image:
