@@ -81,7 +81,7 @@ persistence:
       existingSecret: "storage"
       region: us-east-1
       bucket: harbor
-      regionendpoint: http://minio.minio.svc.cluster.local:9000
+      regionendpoint: http://minio.minio.svc.cluster.local
       secure: true
       v4auth: true
 
