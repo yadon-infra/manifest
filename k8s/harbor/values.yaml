@@ -75,14 +75,15 @@ persistence:
     # Refer to
     # https://github.com/distribution/distribution/blob/release/2.8/docs/configuration.md#redirect
     # for the detail.
-    disableredirect: false
+    disableredirect: true
     type: s3
     s3:
       existingSecret: "storage"
       region: us-east-1
       bucket: harbor
-      regionendpoint: http://minio.minio.svc.cluster.local
-      secure: false
+      regionendpoint: http://minio.minio.svc.cluster.local:9000
+      secure: true
+      v4auth: true
 
 # The initial password of Harbor admin. Change it from portal after launching Harbor
 # or give an existing secret for it
