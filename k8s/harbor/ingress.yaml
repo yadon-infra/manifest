@@ -7,6 +7,7 @@ metadata:
     kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
     traefik.ingress.kubernetes.io/service.serversscheme: http
+    traefik.ingress.kubernetes.io/buffering: "off"
 spec:
   tls:
     - hosts:
