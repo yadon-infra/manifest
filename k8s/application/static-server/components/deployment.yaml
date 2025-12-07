@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-server
+  namespace: default
+  labels:
+    app: static-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: static-server
+  template:
+    metadata:
+      labels:
+        app: static-server
+    spec:
+      containers:
+      - name: static-server
+        image: harbor.yadon3141.com/images/static-server:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: MINIO_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: minio-static-server
+              key: endpoint
+        - name: MINIO_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-static-server
+              key: access-key
+        - name: MINIO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-static-server
+              key: secret-key
+        - name: MINIO_USE_SSL
+          valueFrom:
+            secretKeyRef:
+              name: minio-static-server
+              key: use-ssl
+        - name: PORT
+          value: "8080"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+            httpHeaders:
+            - name: Host
+              value: blog.yadon3141.com
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+            httpHeaders:
+            - name: Host
+              value: blog.yadon3141.com
+          initialDelaySeconds: 5
+          periodSeconds: 10
