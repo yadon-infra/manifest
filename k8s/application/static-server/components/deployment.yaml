@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: static-server
-        image: harbor.yadon3141.com/infra/static-server:latest
+        image: harbor.yadon3141.com/images/static-server:latest
         ports:
         - containerPort: 8080
           name: http
