@@ -81,7 +81,7 @@ persistence:
       existingSecret: "storage"
       region: us-east-1
       bucket: harbor
-      regionendpoint: http://myminio-hl.minio.svc.cluster.local:9000
+      regionendpoint: http://minio.minio.svc.cluster.local
       secure: false
 
 # The initial password of Harbor admin. Change it from portal after launching Harbor
