@@ -33,13 +33,11 @@ func main() {
 	}
 
 	staticHandler := handler.NewStaticHandler(minioStorage, logger)
-
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	
 	r.Use(loggingMiddleware(logger))
 	r.Use(gin.Recovery())
-	
 	r.NoRoute(staticHandler.ServeFiles)
 
 	logger.WithField("port", port).Info("Starting server")
@@ -51,9 +49,7 @@ func main() {
 func loggingMiddleware(logger *logrus.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
-		
 		c.Next()
-		
 		logger.WithFields(logrus.Fields{
 			"method":     c.Request.Method,
 			"path":       c.Request.URL.Path,
