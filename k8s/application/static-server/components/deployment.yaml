@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: static-server
-        image: harbor.harbor.svc.cluster.local/images/static-server:latest
+        image: http://192.168.0.55:30002/images/static-server:latest
         ports:
         - containerPort: 8080
           name: http
