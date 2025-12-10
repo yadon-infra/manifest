@@ -1,7 +1,6 @@
-# Build stage
 FROM golang:1.25.2-alpine AS builder
 
-RUN apk add --no-cache git
+RUN apk add --no-cache git ca-certificates
 
 WORKDIR /app
 
@@ -15,11 +14,10 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o static-server ./c
 # Final stage
 FROM alpine:latest
 
-RUN apk --no-cache add ca-certificates
-
 WORKDIR /root/
 
 COPY --from=builder /app/static-server .
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 EXPOSE 8080
 
