@@ -32,7 +32,9 @@ func (h *StaticHandler) ServeFiles(c *gin.Context) {
 		return
 	}
 	objectPath := strings.TrimPrefix(c.Request.URL.Path, "/")
-	if objectPath == "" || strings.HasSuffix(objectPath, "/") {
+	// Add bucket name as directory prefix
+	objectPath = path.Join(bucket, objectPath)
+	if strings.HasSuffix(objectPath, "/") || objectPath == bucket {
 		objectPath = path.Join(objectPath, "index.html")
 	}
 
