@@ -35,8 +35,6 @@ func (h *StaticHandler) ServeFiles(c *gin.Context) {
 	if strings.HasSuffix(objectPath, "/") || objectPath == "" {
 		objectPath = path.Join(objectPath, "index.html")
 	}
-	// Add bucket name as prefix for object path
-	objectPath = path.Join(bucket, objectPath)
 
 	if !h.storage.ObjectExists(c, bucket, objectPath) {
 		if !strings.HasSuffix(objectPath, ".html") {
