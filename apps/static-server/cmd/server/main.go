@@ -38,6 +38,9 @@ func main() {
 	
 	r.Use(loggingMiddleware(logger))
 	r.Use(gin.Recovery())
+	
+	// Health check route
+	r.GET("/", staticHandler.ServeFiles)
 	r.NoRoute(staticHandler.ServeFiles)
 
 	logger.WithField("port", port).Info("Starting server")
