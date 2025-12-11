@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: static-server
-        image: ghcr.io/seipan/infra/static-server:main-5859779
+        image: ghcr.io/seipan/infra/static-server:main-c97cb39
         ports:
         - containerPort: 8080
           name: http
