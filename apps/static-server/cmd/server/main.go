@@ -15,7 +15,7 @@ import (
 func main() {
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{})
-	logger.SetLevel(logrus.InfoLevel)
+	logger.SetLevel(logrus.DebugLevel)
 
 	endpoint := getEnv("MINIO_ENDPOINT", "minio.minio.svc.cluster.local:9000")
 	accessKey := getEnv("MINIO_ACCESS_KEY", "")

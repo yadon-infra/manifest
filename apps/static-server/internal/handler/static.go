@@ -38,6 +38,13 @@ func (h *StaticHandler) ServeFiles(c *gin.Context) {
 	// Add bucket name as prefix since objects are stored with bucket prefix
 	objectPath = path.Join(bucket, objectPath)
 
+	h.logger.WithFields(logrus.Fields{
+		"bucket":     bucket,
+		"objectPath": objectPath,
+		"host":       host,
+		"url":        c.Request.URL.Path,
+	}).Debug("Attempting to serve file")
+
 	if !h.storage.ObjectExists(c, bucket, objectPath) {
 		if !strings.HasSuffix(objectPath, ".html") {
 			htmlPath := objectPath + ".html"
@@ -63,7 +70,10 @@ func (h *StaticHandler) ServeFiles(c *gin.Context) {
 
 	object, err := h.storage.GetObject(c, bucket, objectPath)
 	if err != nil {
-		h.logger.WithError(err).Error("Failed to get object from storage")
+		h.logger.WithError(err).WithFields(logrus.Fields{
+			"bucket": bucket,
+			"object": objectPath,
+		}).Error("Failed to get object from storage")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
