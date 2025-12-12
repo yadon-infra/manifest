@@ -39,9 +39,9 @@ func main() {
 	r.Use(loggingMiddleware(logger))
 	r.Use(gin.Recovery())
 	
-	// Health check route
-	r.GET("/", staticHandler.ServeFiles)
-	r.NoRoute(staticHandler.ServeFiles)
+	// Catch all routes for static file serving
+	r.GET("/*filepath", staticHandler.ServeFiles)
+	r.HEAD("/*filepath", staticHandler.ServeFiles)
 
 	logger.WithField("port", port).Info("Starting server")
 	if err := r.Run(fmt.Sprintf(":%s", port)); err != nil {
