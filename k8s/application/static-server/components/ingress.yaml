@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-  - host: "*.yadon3141.com"
+  - host: "blog.yadon3141.com"
     http:
       paths:
       - path: /
